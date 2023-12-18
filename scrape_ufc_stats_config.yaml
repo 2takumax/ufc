@@ -88,11 +88,20 @@ fighter_details_column_names:
 # column names for fighter tale of the tape
 fighter_tott_column_names:
   - FIGHTER
+  - RECORD
   - HEIGHT
   - WEIGHT
   - REACH
   - STANCE
   - DOB
+  - SLpM
+  - Str. Acc.
+  - SApM
+  - Str. Def
+  - TD Avg.
+  - TD Acc.
+  - TD Def.
+  - Sub. Avg.
   - URL
 
 

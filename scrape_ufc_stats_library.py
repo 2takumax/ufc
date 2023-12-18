@@ -547,12 +547,33 @@ def parse_fighter_tott(soup):
     # append fighter's name to fighter_tott
     fighter_tott.append('Fighter:'+fighter_name)
 
+    # parse fighter's record
+    fighter_record = soup.find('span', class_='b-content__title-record').text.split(':')[1].strip()
+    # append fighter's name to fighter_tott
+    fighter_tott.append('Record:'+fighter_record)
+    
     # parse fighter's tale of the tape
     tott = soup.find_all('ul', class_='b-list__box-list')[0]
     # loop through each tag to get text and next_sibling text
     for tag in tott.find_all('i'):
         # add text together and append to fighter_tott
         fighter_tott.append(tag.text + tag.next_sibling)
+
+    # parse fighter's tale of the tape
+    tott = soup.find_all('ul', class_='b-list__box-list b-list__box-list_margin-top')[0]
+    # loop through each tag to get text and next_sibling text
+    for tag in tott.find_all('i'):
+        # add text together and append to fighter_tott
+        fighter_tott.append(tag.text + tag.next_sibling)
+
+    # parse fighter's tale of the tape
+    tott = soup.find_all('ul', class_='b-list__box-list b-list__box-list_margin-top')[1]
+    # loop through each tag to get text and next_sibling text
+    for tag in tott.find_all('i'):
+        # add text together and append to fighter_tott
+        fighter_tott.append(tag.text + tag.next_sibling)
+
+    
     # clean each element in the list, removing '\n' and '  '
     fighter_tott = [text.replace('\n', '').replace('  ', '') for text in fighter_tott]
     
