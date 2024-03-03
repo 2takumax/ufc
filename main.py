@@ -33,7 +33,10 @@ else:
     st.write("No matching fighters found")
 
 
-
+# ボタンを作成
+if st.button('ここ押してね！！'):
+    # ボタンが押された場合、メッセージを表示
+    st.write('わざわざリンクを辿ってくるなんて、俺のファンに違いない。いつもありがとう❤️')
 
 
 
