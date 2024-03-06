@@ -33,21 +33,6 @@ else:
     st.write("No matching fighters found")
 
 
-# ボタンを作成
-if st.button('ここ押してね！！'):
-    # ボタンが押された場合、メッセージを表示
-    st.write('わざわざリンクを辿ってくるなんて、俺のファンに違いない。いつもありがとう❤️')
-
-
-# カスタムCSSを定義
-st.markdown("""
-    <style>
-    div.stButton > button:first-child {
-        background-color: #ff4b4b;
-        color: white;
-    }
-    </style>""", unsafe_allow_html=True)
-
 # st.title('Streamlit 超入門')
 
 # st.write('Display Image')
