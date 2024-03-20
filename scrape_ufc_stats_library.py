@@ -572,10 +572,11 @@ def parse_fighter_tott(soup):
     for tag in tott.find_all('i'):
         # add text together and append to fighter_tott
         fighter_tott.append(tag.text + tag.next_sibling)
-
     
     # clean each element in the list, removing '\n' and '  '
     fighter_tott = [text.replace('\n', '').replace('  ', '') for text in fighter_tott]
+
+    fighter_tott = [item for item in fighter_tott if item != '']
     
     # return
     return fighter_tott

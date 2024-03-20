@@ -14,6 +14,8 @@ fight_details_column_names:
   - EVENT
   - BOUT
   - URL
+  - DATE
+  - LOCATION
 
 # column names for extracted fight results
 fight_results_column_names:
@@ -28,6 +30,8 @@ fight_results_column_names:
   - REFEREE
   - DETAILS
   - URL
+  # - DATE
+  # - LOCATION
 
 # column names for extracted fight totals
 totals_column_names:
