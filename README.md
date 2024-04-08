@@ -7,6 +7,5 @@ https://gahahaha.streamlit.app/
 試合予測モデルも作成している。  
 精度が上がるように奮闘中
 
-ワークフロー  
-スクレイピング（Python） → SQLite3 → データ加工（SQL） → 可視化アプリ or 機械学習  
-Orchestration : cron
+# アーキテクチャ
+<img width="968" alt="スクリーンショット 2024-04-07 18 55 08" src="https://github.com/2takumax/ufc/assets/100655753/c7ebdb99-4b9a-466a-af2b-2e9a57c1b2a5">
