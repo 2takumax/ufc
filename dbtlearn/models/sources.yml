@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: ufc
+    schema: raw
+    tables:
+      - name: fighters
+        identifier: raw_fighters
+
+      - name: fight_results
+        identifier: raw_fight_results
+
+      - name: fight_stats
+        identifier: raw_fight_stats
