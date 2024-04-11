@@ -21,7 +21,7 @@ select
     , time_format
     , referee
     , details
-    , date
+    , date as event_date
     , location
     , url
 from
