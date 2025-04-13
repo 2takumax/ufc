@@ -1,5 +1,4 @@
 config.json
-*.csv
 .devcontainer
 .vscode
 bin
