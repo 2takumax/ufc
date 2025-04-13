@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  ufc-dev:
+    build: .
+    volumes:
+      - ~/.dbt:/root/.dbt
+    working_dir: /app
+    tty: true
