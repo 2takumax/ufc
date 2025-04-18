@@ -15,3 +15,6 @@ scrape_ufc_stats_unparsed_data.ipynb
 scrape_ufc_stats_unparsed_data.py
 scrape_ufc_stats_working_example.ipynb
 .streamlit
+terraform.tfstate.*
+terraform.tfstate
+.terraform
