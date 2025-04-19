@@ -7,7 +7,7 @@ import scrape_ufc_stats_library as LIB
 
 def lambda_handler(event, context):
     # バケットとファイル名を指定
-    bucket_name = 'ufc-scrape'
+    bucket_name = 'my-test-terraform-bucket-202504'
     
     # 定義されたURLからイベントの詳細を解析
     events_url = config['completed_events_all_url']

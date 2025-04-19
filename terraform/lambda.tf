@@ -24,7 +24,7 @@ resource "aws_lambda_function" "test_terraform" {
 resource "aws_cloudwatch_event_rule" "daily_trigger" {
   name                = "run-test-terraform-daily"
   description         = "Triggers test_terraform lambda daily at 6AM JST"
-  schedule_expression = "cron(0 21 * * ? *)"  # UTCで前日の21:00 = JST 6:00
+  schedule_expression = "cron(0 18 ? * 1 *)"  # UTCで前日の21:00 = JST 6:00
 }
 
 resource "aws_cloudwatch_event_target" "test_terraform_trigger" {
