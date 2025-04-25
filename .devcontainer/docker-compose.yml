@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  ufc-dev:
+    build: .
+    volumes:
+      - ~/.dbt:/root/.dbt
+    working_dir: /app
+    tty: true
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=ap-northeast-1
