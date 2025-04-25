@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   ufc-dev:
-    build: .
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
     volumes:
       - ~/.dbt:/root/.dbt
     working_dir: /app

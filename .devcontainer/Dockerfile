@@ -24,7 +24,7 @@ RUN apt update && apt-get install terraform
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY .devcontainer/requirements.txt .
 
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
