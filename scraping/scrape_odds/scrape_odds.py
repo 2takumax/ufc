@@ -34,23 +34,38 @@ class OddsScraper():
                     f"http://www.betmma.tips/{a['href']}" for a in soup.select("td td td td a")
                 ]
         
-        # Also scrape full table to fetch dates as well - we need this
-        # to join back onto UFC events as names don't match
-        table = pd.read_html(response.text)[8] # FIXME - hard coded 8
+        # Manually parse the event table
+        # Here, find all <table> tags and target the 9th table (index 8)
+        tables = soup.find_all('table')
+        target_table = tables[8]  # 9th table (0-indexed)
 
-        # set first row as col headers
-        table.columns = table.iloc[0]
-        table = table[1:-1]
-        table["url"] = links
-        table = table[["Date", "Event", "url"]]
+        rows = target_table.find_all('tr')
 
-        # filter to UFC events only
-        table = table[
-            table.Event.str.contains("UFC") &
-            ~table.Event.str.contains("Road to UFC")
-        ].reset_index()
+        dates = []
+        events = []
 
-        self.event_links = table
+        for row in rows[1:-1]:  # Skip the first header row and last footer row
+            cols = row.find_all('td')
+            if len(cols) >= 2:
+                date_text = cols[0].get_text(strip=True)
+                event_text = cols[1].get_text(strip=True)
+                dates.append(date_text)
+                events.append(event_text)
+
+        # Convert to DataFrame
+        table_df = pd.DataFrame({
+            "Date": dates,
+            "Event": events,
+            "url": links
+        })
+
+        # Filter for UFC events only
+        table_df = table_df[
+            table_df["Event"].str.contains("UFC") &
+            ~table_df["Event"].str.contains("Road to UFC")
+        ].reset_index(drop=True)
+
+        self.event_links = table_df
 
     def read_existing_data(self):
         s3 = boto3.client('s3')
@@ -95,7 +110,7 @@ class OddsScraper():
     def write_data(self):
         s3 = boto3.client('s3')
         csv_buffer = StringIO()
-        merged_data = pd.concat([self.existing_data, self.event_odds]).drop_duplicates(subset="link").reset_index(drop=True)
+        merged_data = pd.concat([self.existing_data, self.event_odds]).reset_index(drop=True)
         merged_data.to_csv(csv_buffer, index=False)
         s3.put_object(Body=csv_buffer.getvalue(), Bucket="my-test-terraform-bucket-202504", Key="odds.csv")
 
