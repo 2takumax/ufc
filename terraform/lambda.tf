@@ -1,7 +1,7 @@
 data "archive_file" "test_terraform" {
   type        = "zip"
-  source_dir  = "../scraping"
-  output_path = "../scraping/scraping.zip"
+  source_dir  = "../scraping/scrape_events"
+  output_path = "../scraping/scrape_events/scraping.zip"
 }
 
 resource "aws_lambda_function" "test_terraform" {

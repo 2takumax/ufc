@@ -2,7 +2,7 @@ import pandas as pd
 import yaml
 config = yaml.safe_load(open('scrape_ufc_stats_config.yaml'))
 
-import scrape_ufc_stats_library as LIB
+import scraping.scrape_events.scrape_ufc_stats_library as LIB
 
 
 def lambda_handler(event, context):
