@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 import datetime
 import time
-
+from io import StringIO
+import boto3
 import requests
 from bs4 import BeautifulSoup
 
@@ -19,6 +20,7 @@ class OddsScraper():
     def __init__(self, test=False):
         self.test = test
         self.all_url = "https://www.betmma.tips/past_mma_handicapper_performance_all.php?Org=1"
+        self.existing_data = None
         self.event_links = None
         self.event_odds = None
         self.curr_time = datetime.datetime.now()
@@ -50,22 +52,39 @@ class OddsScraper():
 
         self.event_links = table
 
-    def scrape_all_event_odds(self):
+    def read_existing_data(self):
+        s3 = boto3.client('s3')
+        bucket = "my-test-terraform-bucket-202504"
+        key = "odds.csv"
+
+        try:
+            obj = s3.get_object(Bucket=bucket, Key=key)
+            existing_df = pd.read_csv(obj['Body'])
+            self.existing_data = existing_df
+        except s3.exceptions.NoSuchKey:
+            print("No existing data found. Starting fresh.")
+            self.existing_data = pd.DataFrame(columns=["link", "date", "event", "fighter1", "fighter2", "fighter1_odds", "fighter2_odds", "result", "timestamp"])
+
+    def scrape_new_event_odds(self):
         """Iterate over all individual urls to scrape odds"""
+
+        existing_links = set(self.existing_data["link"].unique())
 
         scraped_results = []
 
-        table = self.event_links
+        for i, row in self.event_links.iterrows():
+            if row.url in existing_links:
+                print(f"Skipping {row.url} (already exists)")
+                continue
 
-        for i, row in table.iterrows():
-            print(f"{i+1}/{len(table)} - {row.Date} - {row.url}")
+            print(f"Scraping {row.url}")
 
             results = self._scrape_event_odds_page(row.url)
             results["link"] = row.url
             results["date"] = row.Date
             scraped_results.append(results)
 
-            utils.sleep_randomly()
+            sleep_randomly()
 
         odds_df = pd.concat(scraped_results).reset_index(drop=True)
 
@@ -74,7 +93,11 @@ class OddsScraper():
         self.event_odds = odds_df
 
     def write_data(self):
-        self.event_odds.to_csv("./data/odds_raw.csv", index=False)
+        s3 = boto3.client('s3')
+        csv_buffer = StringIO()
+        merged_data = pd.concat([self.existing_data, self.event_odds]).drop_duplicates(subset="link").reset_index(drop=True)
+        merged_data.to_csv(csv_buffer, index=False)
+        s3.put_object(Body=csv_buffer.getvalue(), Bucket="my-test-terraform-bucket-202504", Key="odds.csv")
 
     def _scrape_event_odds_page(self, link):
 
@@ -168,7 +191,8 @@ def lambda_handler(event, context):
     print("-- Scraping odds data...")
     odds_scraper = OddsScraper()
     odds_scraper.get_individual_event_urls()
-    odds_scraper.scrape_all_event_odds()
+    odds_scraper.read_existing_data()
+    odds_scraper.scrape_new_event_odds()
 
     print("-- Writing odds data...")
     odds_scraper.write_data()

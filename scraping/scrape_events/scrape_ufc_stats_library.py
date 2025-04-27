@@ -6,9 +6,30 @@ import numpy as np
 import re
 import requests
 from bs4 import BeautifulSoup
+import boto3
+from io import StringIO
 import itertools
 import string
 
+s3 = boto3.client('s3')
+
+def read_csv_from_s3(bucket, key):
+    response = s3.get_object(Bucket=bucket, Key=key)
+    status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
+
+    if status == 200:
+        csv_string = response["Body"].read().decode('utf-8')
+        df = pd.read_csv(StringIO(csv_string))
+        return df
+    else:
+        print("Failed to get file: ", key)
+        return pd.DataFrame()
+
+
+def write_df_to_s3(df, bucket, key):
+    csv_buffer = StringIO()
+    df.to_csv(csv_buffer, index=False)
+    s3.put_object(Bucket=bucket, Body=csv_buffer.getvalue(), Key=key)
 
 
 # URLからsoupを取得
