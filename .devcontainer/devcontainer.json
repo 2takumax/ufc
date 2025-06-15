@@ -9,7 +9,7 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "hashicorp.terraform",
-        "dbt-labs.dbt-power-user"
+        "dbtlabsinc.dbt"
       ]
     }
   }

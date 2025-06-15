@@ -12,7 +12,7 @@ resource "aws_lambda_function" "test_terraform" {
   role             = aws_iam_role.lambda_iam_role.arn
   handler          = "lambda_function.lambda_handler"
   timeout          = 180
-  layers           = [
+  layers = [
     "arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p312-numpy:11",
     "arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p312-pandas:15",
     "arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p312-requests:12",
@@ -24,7 +24,7 @@ resource "aws_lambda_function" "test_terraform" {
 resource "aws_cloudwatch_event_rule" "daily_trigger" {
   name                = "run-test-terraform-daily"
   description         = "Triggers test_terraform lambda daily at 6AM JST"
-  schedule_expression = "cron(0 18 ? * 1 *)"  # UTCで前日の21:00 = JST 6:00
+  schedule_expression = "cron(0 18 ? * 1 *)" # UTCで前日の21:00 = JST 6:00
 }
 
 resource "aws_cloudwatch_event_target" "test_terraform_trigger" {
@@ -55,7 +55,7 @@ resource "aws_lambda_function" "test_odds" {
   role             = aws_iam_role.lambda_iam_role.arn
   handler          = "scrape_odds.lambda_handler"
   timeout          = 180
-  layers           = [
+  layers = [
     "arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p312-numpy:11",
     "arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p312-pandas:15",
     "arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p312-requests:12",

@@ -4,7 +4,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     git \
     gnupg \
-    software-properties-common
+    software-properties-common \
+    direnv
 
 # Install the HashiCorp GPG key.
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
@@ -21,6 +22,8 @@ RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
     tee /etc/apt/sources.list.d/hashicorp.list
 
 RUN apt update && apt-get install terraform
+
+RUN echo 'eval "$(direnv hook bash)"' >> /root/.bashrc
 
 WORKDIR /app
 

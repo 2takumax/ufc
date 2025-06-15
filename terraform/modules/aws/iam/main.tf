@@ -43,7 +43,7 @@ POLICY
 
 resource "aws_iam_role_policy" "lambda_s3_policy" {
   name = "LambdaS3AccessPolicy"
-  role   = aws_iam_role.lambda_iam_role.id
+  role = aws_iam_role.lambda_iam_role.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
