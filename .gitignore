@@ -17,3 +17,5 @@ scrape_ufc_stats_working_example.ipynb
 terraform.tfstate.*
 terraform.tfstate
 .terraform
+.env
+.terraform.lock.hcl

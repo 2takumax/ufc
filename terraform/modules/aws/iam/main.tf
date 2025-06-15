@@ -1,10 +1,3 @@
-# AWS プロバイダの設定
-provider "aws" {
-  # access_key = var.access_key
-  # secret_key = var.secret_key
-  region     = var.region
-}
-
 # lambda用Roleの設定
 resource "aws_iam_role" "lambda_iam_role" {
   name = "terraform_lambda_iam_role"

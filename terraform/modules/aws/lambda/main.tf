@@ -41,11 +41,6 @@ resource "aws_lambda_permission" "allow_eventbridge" {
   source_arn    = aws_cloudwatch_event_rule.daily_trigger.arn
 }
 
-resource "aws_s3_bucket" "lambda_bucket" {
-  bucket = "my-test-terraform-bucket-202504"  # 一意な名前に！
-  force_destroy = true  # terraform destroy 時に中身ごと削除
-}
-
 data "archive_file" "test_odds" {
   type        = "zip"
   source_dir  = "../scraping/scrape_odds"
