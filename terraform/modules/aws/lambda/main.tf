@@ -1,15 +1,15 @@
 data "archive_file" "test_terraform" {
   type        = "zip"
-  source_dir  = "../scraping/scrape_events"
-  output_path = "../scraping/scrape_events/scraping.zip"
+  source_dir  = "${path.module}/scraping_script/scrape_events"
+  output_path = "${path.module}/scraping_script/scrape_events/scraping.zip"
 }
 
 resource "aws_lambda_function" "test_terraform" {
-  function_name    = "test_terraform"
+  function_name    = "scrape_events"
   filename         = data.archive_file.test_terraform.output_path
   source_code_hash = data.archive_file.test_terraform.output_base64sha256
   runtime          = "python3.12"
-  role             = aws_iam_role.lambda_iam_role.arn
+  role             = var.lambda_iam_role
   handler          = "lambda_function.lambda_handler"
   timeout          = 180
   layers = [
@@ -43,16 +43,16 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 
 data "archive_file" "test_odds" {
   type        = "zip"
-  source_dir  = "../scraping/scrape_odds"
-  output_path = "../scraping/scrape_odds/scraping.zip"
+  source_dir  = "${path.module}/scraping_script/scrape_odds"
+  output_path = "${path.module}/scraping_script/scrape_odds/scraping.zip"
 }
 
 resource "aws_lambda_function" "test_odds" {
-  function_name    = "test_odds"
+  function_name    = "scrape_odds"
   filename         = data.archive_file.test_odds.output_path
   source_code_hash = data.archive_file.test_odds.output_base64sha256
   runtime          = "python3.12"
-  role             = aws_iam_role.lambda_iam_role.arn
+  role             = var.lambda_iam_role
   handler          = "scrape_odds.lambda_handler"
   timeout          = 180
   layers = [

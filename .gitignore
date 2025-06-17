@@ -19,3 +19,4 @@ terraform.tfstate
 .terraform
 .env
 .terraform.lock.hcl
+.envrc

@@ -1,4 +1,13 @@
-module "s3" {
-  source        = "../../modules/aws/s3"
-  aws_s3_bucket = local.common.pj_name
+module "iam" {
+  source = "../../modules/aws/iam"
+}
+
+module "lambda" {
+  source = "../../modules/aws/lambda"
+  lambda_iam_role = module.iam.lambda_iam_role
+}
+
+module "snowflake_database" {
+  source        = "../../modules/snowflake/database"
+  database_name = local.common.pj_name
 }

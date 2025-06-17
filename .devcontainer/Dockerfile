@@ -33,4 +33,7 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# .envrcが存在すれば事前にallow（初回起動時の手間削減）
+RUN if [ -f .envrc ]; then direnv allow; fi
+
 CMD ["bash"]
