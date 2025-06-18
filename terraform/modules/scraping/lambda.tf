@@ -1,7 +1,7 @@
 data "archive_file" "test_terraform" {
   type        = "zip"
-  source_dir  = "${path.module}/scraping_script/scrape_events"
-  output_path = "${path.module}/scraping_script/scrape_events/scraping.zip"
+  source_dir  = "${path.module}/script/scrape_events"
+  output_path = "${path.module}/script/scrape_events/scraping.zip"
 }
 
 resource "aws_lambda_function" "test_terraform" {
@@ -9,7 +9,7 @@ resource "aws_lambda_function" "test_terraform" {
   filename         = data.archive_file.test_terraform.output_path
   source_code_hash = data.archive_file.test_terraform.output_base64sha256
   runtime          = "python3.12"
-  role             = var.lambda_iam_role
+  role             = aws_iam_role.lambda_iam_role.arn
   handler          = "lambda_function.lambda_handler"
   timeout          = 180
   layers = [
@@ -21,30 +21,10 @@ resource "aws_lambda_function" "test_terraform" {
   ]
 }
 
-resource "aws_cloudwatch_event_rule" "daily_trigger" {
-  name                = "run-test-terraform-daily"
-  description         = "Triggers test_terraform lambda daily at 6AM JST"
-  schedule_expression = "cron(0 18 ? * 1 *)" # UTCで前日の21:00 = JST 6:00
-}
-
-resource "aws_cloudwatch_event_target" "test_terraform_trigger" {
-  rule      = aws_cloudwatch_event_rule.daily_trigger.name
-  target_id = "test_terraform_lambda"
-  arn       = aws_lambda_function.test_terraform.arn
-}
-
-resource "aws_lambda_permission" "allow_eventbridge" {
-  statement_id  = "AllowExecutionFromEventBridge"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.test_terraform.function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.daily_trigger.arn
-}
-
 data "archive_file" "test_odds" {
   type        = "zip"
-  source_dir  = "${path.module}/scraping_script/scrape_odds"
-  output_path = "${path.module}/scraping_script/scrape_odds/scraping.zip"
+  source_dir  = "${path.module}/script/scrape_odds"
+  output_path = "${path.module}/script/scrape_odds/scraping.zip"
 }
 
 resource "aws_lambda_function" "test_odds" {
@@ -52,7 +32,7 @@ resource "aws_lambda_function" "test_odds" {
   filename         = data.archive_file.test_odds.output_path
   source_code_hash = data.archive_file.test_odds.output_base64sha256
   runtime          = "python3.12"
-  role             = var.lambda_iam_role
+  role             = aws_iam_role.lambda_iam_role.arn
   handler          = "scrape_odds.lambda_handler"
   timeout          = 180
   layers = [
