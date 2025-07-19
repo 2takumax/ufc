@@ -1,3 +1,24 @@
+remote_state {
+    backend = "s3"
+
+    generate = {
+        path = "backend.tf"
+        if_exists = "overwrite"
+    }
+
+    config = {
+        bucket = "ufc-fight-prediction-prod-terraform-state"
+        key = "${path_relative_to_include()}/terraform.tfstate"
+        region = "ap-northeast-1"
+        encrypt = true
+        use_lockfile = true
+    }
+}
+
+generate "provider" {
+  path      = "provider.tf"
+  if_exists = "overwrite"
+  contents  = <<EOF
 terraform {
   required_providers {
     snowflake = {
@@ -21,4 +42,6 @@ provider "snowflake" {
 variable "password" {
   type = string
   sensitive = true
+}
+EOF
 }
