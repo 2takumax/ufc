@@ -1,7 +1,7 @@
 resource "snowflake_table" "fight_stats" {
   name     = "fight_stats"
   database = snowflake_database.ufc-fight-prediction.name
-  schema   = snowflake_schema.RAW.name
+  schema   = "PUBLIC"
 
   column {
     name = "EVENT"
