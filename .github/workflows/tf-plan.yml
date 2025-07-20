@@ -1,0 +1,82 @@
+# name: terragrunt plan
+
+# on:
+#   pull_request:
+#     types:
+#       - opened
+#       - reopened
+#       - synchronize
+#       - ready_for_review
+#     branches:
+#       - main
+#     paths:
+#       - 'infrastructure/terragrunt/**'
+#       - '.github/workflows/tf-plan.yml'
+#   push:
+#     branches:
+#       - main
+# env:
+#   AWS_DEFAULT_REGION: 'ap-northeast-1'
+#   SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+#   GITHUB_HEAD_REF: ${{ github.head_ref }}
+#   GITHUB_BASE_REF: ${{ github.base_ref }}
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: true
+# permissions:
+
+  
+# jobs:
+#   terragrunt-plan:
+#     name: Terragrunt Plan
+#     runs-on: ubuntu-latest
+#     if: github.event_name == 'pull_request'
+
+#     defaults:
+#       run:
+#         working-directory: ./infrastructure
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Terraform
+#         uses: hashicorp/setup-terraform@v3
+#         with:
+#           terraform_version: 1.8.3
+
+#       - name: Install Terragrunt
+#         run: |
+#           curl -L https://github.com/gruntwork-io/terragrunt/releases/latest/download/terragrunt_linux_amd64 -o terragrunt
+#           chmod +x terragrunt
+#           sudo mv terragrunt /usr/local/bin/
+
+#       - name: Run terragrunt plan
+#         run: terragrunt run-all plan --terragrunt-non-interactive
+
+#   terragrunt-apply:
+#     name: Terragrunt Apply
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+#     defaults:
+#       run:
+#         working-directory: ./infrastructure
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Terraform
+#         uses: hashicorp/setup-terraform@v3
+#         with:
+#           terraform_version: 1.8.3
+
+#       - name: Install Terragrunt
+#         run: |
+#           curl -L https://github.com/gruntwork-io/terragrunt/releases/latest/download/terragrunt_linux_amd64 -o terragrunt
+#           chmod +x terragrunt
+#           sudo mv terragrunt /usr/local/bin/
+
+#       - name: Run terragrunt apply
+#         run: terragrunt run-all apply --terragrunt-non-interactive --auto-approve
