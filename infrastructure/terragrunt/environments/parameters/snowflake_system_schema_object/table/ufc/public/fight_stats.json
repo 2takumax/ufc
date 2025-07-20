@@ -1,0 +1,111 @@
+{
+    "database": "UFC",
+    "schema" : "PUBLIC",
+    "columns" : [
+        {
+            "name": "EVENT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "BOUT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "ROUND",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "FIGHTER",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "KD",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "SIG_STR",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "SIG_STR_RATE",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TOTAL_STR",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TD",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TD_RATE",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "SUB_ATT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "REV",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "CTRL",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "HEAD",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "BODY",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "LEG",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "DISTANCE",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "CLINCH",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "GROUND",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "DATE",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "LOCATION",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        }
+    ]
+}

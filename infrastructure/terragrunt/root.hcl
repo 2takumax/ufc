@@ -1,3 +1,11 @@
+locals {
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+}
+
+inputs = {
+  env = local.environment_vars.locals
+}
+
 remote_state {
     backend = "s3"
 
