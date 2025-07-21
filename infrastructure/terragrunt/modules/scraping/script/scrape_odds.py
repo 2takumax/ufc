@@ -1,33 +1,47 @@
-"""Scrape historic UFC odds from betmma.tips"""
+"""
+Scrape historic UFC odds from betmma.tips
+
+The work below draws lightly upon another data scientist's work here in identifying an appropriate site to 
+scrape odds from as well as some logic to scrape required elements.
+    https://github.com/jasonchanhku/web_scraping/blob/master/MMA%20Project/favourite_vs_underdogs.R
+
+This required significant additional effort of my own to rewrite in Python (instead of R), scrape from a 
+different page (above work scrapes from a page missing some events), write appropriate pipeline-ready code, 
+as well as significant updates to logic which was no longer working correctly  for latest event pages 
+- e.g., updating the logic to correctly fetch fighter1, fighter2 and result, improve logic to run faster
+
+"""
 
 import pandas as pd
 import numpy as np
 import datetime
-import time
-from io import StringIO
-import boto3
+
 import requests
 from bs4 import BeautifulSoup
 
-
-def sleep_randomly():
-    """Sleep for some random time between requests"""
-    sleep_time = np.random.uniform(2,4)
-    time.sleep(sleep_time)
+import utils
 
 class OddsScraper():
     """Scrape historic odds from betmma.tips"""
     def __init__(self, test=False):
         self.test = test
         self.all_url = "https://www.betmma.tips/past_mma_handicapper_performance_all.php?Org=1"
-        self.existing_data = None
         self.event_links = None
         self.event_odds = None
         self.curr_time = datetime.datetime.now()
 
     def get_individual_event_urls(self):
         """Get all individual urls"""
-        response = requests.get(self.all_url)
+
+        # lambdaで実行する際にbot扱いとされるのを回避するため
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Connection": "keep-alive"
+        }
+
+        response = requests.get(self.all_url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         links = [
@@ -37,6 +51,7 @@ class OddsScraper():
         # Manually parse the event table
         # Here, find all <table> tags and target the 9th table (index 8)
         tables = soup.find_all('table')
+
         target_table = tables[8]  # 9th table (0-indexed)
 
         rows = target_table.find_all('tr')
@@ -56,7 +71,7 @@ class OddsScraper():
         table_df = pd.DataFrame({
             "Date": dates,
             "Event": events,
-            "url": links
+            "link": links
         })
 
         # Filter for UFC events only
@@ -67,39 +82,22 @@ class OddsScraper():
 
         self.event_links = table_df
 
-    def read_existing_data(self):
-        s3 = boto3.client('s3')
-        bucket = "my-test-terraform-bucket-202504"
-        key = "odds.csv"
-
-        try:
-            obj = s3.get_object(Bucket=bucket, Key=key)
-            existing_df = pd.read_csv(obj['Body'])
-            self.existing_data = existing_df
-        except s3.exceptions.NoSuchKey:
-            print("No existing data found. Starting fresh.")
-            self.existing_data = pd.DataFrame(columns=["link", "date", "event", "fighter1", "fighter2", "fighter1_odds", "fighter2_odds", "result", "timestamp"])
-
-    def scrape_new_event_odds(self):
+    def scrape_event_odds(self, target_df: pd.DataFrame = None) -> None:
         """Iterate over all individual urls to scrape odds"""
-
-        existing_links = set(self.existing_data["link"].unique())
 
         scraped_results = []
 
-        for i, row in self.event_links.iterrows():
-            if row.url in existing_links:
-                print(f"Skipping {row.url} (already exists)")
-                continue
+        table = target_df if target_df is not None else self.event_links
 
-            print(f"Scraping {row.url}")
+        for i, row in table.iterrows():
+            print(f"{i+1}/{len(table)} - {row.Date} - {row.link}")
 
-            results = self._scrape_event_odds_page(row.url)
-            results["link"] = row.url
+            results = self._scrape_event_odds_page(row.link)
+            results["link"] = row.link
             results["date"] = row.Date
             scraped_results.append(results)
 
-            sleep_randomly()
+            utils.sleep_randomly()
 
         odds_df = pd.concat(scraped_results).reset_index(drop=True)
 
@@ -108,15 +106,18 @@ class OddsScraper():
         self.event_odds = odds_df
 
     def write_data(self):
-        s3 = boto3.client('s3')
-        csv_buffer = StringIO()
-        merged_data = pd.concat([self.existing_data, self.event_odds]).reset_index(drop=True)
-        merged_data.to_csv(csv_buffer, index=False)
-        s3.put_object(Body=csv_buffer.getvalue(), Bucket="my-test-terraform-bucket-202504", Key="odds.csv")
+        self.event_odds.to_csv("./data/odds_raw.csv", index=False)
 
     def _scrape_event_odds_page(self, link):
+        # lambdaで実行する際にbot扱いとされるのを回避するため
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Connection": "keep-alive"
+        }
 
-        sub_response = requests.get(link)
+        sub_response = requests.get(link, headers=headers)
         sub_soup = BeautifulSoup(sub_response.text, 'html.parser')
 
         event = []
@@ -201,13 +202,3 @@ class OddsScraper():
             "fighter2_odds": fighter2_odds,
             "result": result
         })
-
-def lambda_handler(event, context):
-    print("-- Scraping odds data...")
-    odds_scraper = OddsScraper()
-    odds_scraper.get_individual_event_urls()
-    odds_scraper.read_existing_data()
-    odds_scraper.scrape_new_event_odds()
-
-    print("-- Writing odds data...")
-    odds_scraper.write_data()

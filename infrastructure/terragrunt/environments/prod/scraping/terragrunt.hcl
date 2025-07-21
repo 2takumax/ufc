@@ -7,5 +7,5 @@ terraform {
 }
 
 inputs = {
-    aws_s3_bucket = "ufc-fight-prediction"
+    aws_s3_bucket = "ufc-scraped-data"
 }

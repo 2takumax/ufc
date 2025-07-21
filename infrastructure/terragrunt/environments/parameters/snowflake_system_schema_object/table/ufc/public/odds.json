@@ -1,0 +1,51 @@
+{
+    "database": "UFC",
+    "schema" : "PUBLIC",
+    "columns" : [
+        {
+            "name": "LINK",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "DATE",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "EVENT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "FIGHTER1",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "FIGHTER2",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "FIGHTER1_ODDS",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "FIGHTER2_ODDS",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "RESULT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TIMESTAMP",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        }
+    ]
+}

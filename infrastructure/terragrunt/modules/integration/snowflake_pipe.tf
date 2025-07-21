@@ -1,13 +1,13 @@
 resource "snowflake_pipe" "pipe" {
-  database = "ufc-fight-prediction"
+  database = "UFC"
   schema   = "PUBLIC"
   name     = "fight_stats_pipe"
 
   comment = "A pipe."
 
   copy_statement = <<-EOT
-    COPY INTO "ufc-fight-prediction".PUBLIC."fight_stats"
-    FROM @"ufc-fight-prediction".PUBLIC."external_stage"/ufc_fight_stats.csv
+    COPY INTO "UFC".PUBLIC."ODDS"
+    FROM @"UFC".PUBLIC."${snowflake_stage.external_stage}"/odds.csv
     FILE_FORMAT = (TYPE = 'CSV')
   EOT
   auto_ingest    = true

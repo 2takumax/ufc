@@ -12,7 +12,7 @@ resource "aws_iam_policy" "policy" {
           "s3:GetObject",
           "s3:GetObjectVersion"
         ],
-        "Resource" : "arn:aws:s3:::<bucket>/<prefix>/*"
+        "Resource" : "arn:aws:s3:::${var.bucket_id}/*"
       },
       {
         "Effect" : "Allow",
@@ -20,14 +20,7 @@ resource "aws_iam_policy" "policy" {
           "s3:ListBucket",
           "s3:GetBucketLocation"
         ],
-        "Resource" : "arn:aws:s3:::<bucket>",
-        "Condition" : {
-          "StringLike" : {
-            "s3:prefix" : [
-              "<prefix>/*"
-            ]
-          }
-        }
+        "Resource" : "arn:aws:s3:::${var.bucket_id}"
       }
     ]
   })
@@ -43,11 +36,11 @@ resource "aws_iam_role" "snowflake" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS" : snowflake_storage_integration.s3_int.storage_aws_iam_user_arn
+          "AWS" : "${snowflake_storage_integration.s3_int.storage_aws_iam_user_arn}"
         },
         "Condition" : {
           "StringEquals" : {
-            "sts:ExternalId" : snowflake_storage_integration.s3_int.storage_aws_external_id
+            "sts:ExternalId" : "${snowflake_storage_integration.s3_int.storage_aws_external_id}"
           }
         }
       }

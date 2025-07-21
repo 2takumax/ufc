@@ -12,6 +12,6 @@ dependency "scraping" {
 
 inputs = {
     bucket_id = dependency.scraping.outputs.s3_bucket_id
-    database_name = "ufc-fight-prediction"
+    database_name = "UFC"
     snowflake_iam_role_name = "snowflake"
 }
