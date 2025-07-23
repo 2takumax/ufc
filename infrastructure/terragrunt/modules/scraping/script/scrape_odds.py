@@ -89,6 +89,11 @@ class OddsScraper():
 
         table = target_df if target_df is not None else self.event_links
 
+        if table is None or table.empty:
+            print("No data to scrape.")
+            self.event_odds = pd.DataFrame()  # 空のDataFrameを代入
+            return
+
         for i, row in table.iterrows():
             print(f"{i+1}/{len(table)} - {row.Date} - {row.link}")
 
