@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Poetry: Debug ufc.scraper with --events",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "ufc.scraper",
+      "console": "integratedTerminal",
+      "args": ["${command:pickArgs}"],
+      "justMyCode": false
+    }
+  ]
+}
