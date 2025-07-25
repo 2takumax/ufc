@@ -1,0 +1,91 @@
+{
+    "database": "UFC",
+    "schema" : "PUBLIC",
+    "columns" : [
+        {
+            "name": "NAME",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "FIGHT_RECORD",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "NICKNAME",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "HEIGHT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "WEIGHT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "REACH",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "STANCE",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "DOB",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "SLPM",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "STR_ACC",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "SAPM",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "STR_DEF",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TD_AVG",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TD_ACC",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TD_DEF",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "SUB_AVG",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TIMESTAMP",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        }
+    ]
+}
