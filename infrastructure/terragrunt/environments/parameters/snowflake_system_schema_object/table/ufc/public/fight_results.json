@@ -1,0 +1,61 @@
+{
+    "database": "UFC",
+    "schema" : "PUBLIC",
+    "columns" : [
+        {
+            "name": "EVENT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "BOUT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "OUTCOME",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "WEIGHTCLASS",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "METHOD",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "ROUND",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TIME",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "TIME_FORMAT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "REFEREE",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "DETAILS",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "URL",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        }
+    ]
+}

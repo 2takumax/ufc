@@ -1,0 +1,21 @@
+{
+    "database": "UFC",
+    "schema" : "PUBLIC",
+    "columns" : [
+        {
+            "name": "EVENT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "BOUT",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        },
+        {
+            "name": "URL",
+            "type": "VARCHAR(10000)",
+            "nullable": false
+        }
+    ]
+}

@@ -1,100 +1,84 @@
-# UFCデータをスクレイピングするためのライブラリ
+'''
+Overview
 
+library of functions to scrape ufc stats
 
+'''
+
+# imports
 import pandas as pd
 import numpy as np
 import re
 import requests
 from bs4 import BeautifulSoup
-import boto3
-from io import StringIO
 import itertools
 import string
 
-s3 = boto3.client('s3')
-
-def read_csv_from_s3(bucket, key):
-    response = s3.get_object(Bucket=bucket, Key=key)
-    status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
-
-    if status == 200:
-        csv_string = response["Body"].read().decode('utf-8')
-        df = pd.read_csv(StringIO(csv_string))
-        return df
-    else:
-        print("Failed to get file: ", key)
-        return pd.DataFrame()
 
 
-def write_df_to_s3(df, bucket, key):
-    csv_buffer = StringIO()
-    df.to_csv(csv_buffer, index=False)
-    s3.put_object(Bucket=bucket, Body=csv_buffer.getvalue(), Key=key)
-
-
-# URLからsoupを取得
+# get soup from url
 def get_soup(url):
     '''
-    BeautifulSoupを使用してURLからsoupを取得
+    get soup from url using beautifulsoup
 
-    引数:
-    url (str): 解析するページのURL
+    arguments:
+    url (str): url of page to parse
 
-    戻り値:
+    returns:
     soup
     '''
     
-    # URLからHTMLデータを取得
+    # get page of url
     page = requests.get(url)
-    # soupを生成
+    # create soup
     soup = BeautifulSoup(page.content, 'html.parser')
 
+    # return
     return soup
 
 
 
-
-# 大会情報の取得
+# parse event details
 def parse_event_details(soup):
     '''
-    soupから大会情報を取得する。
-    大会の名前、URL、日付、場所などを含む。
-    各要素から'\n'や' 'を取り除く。
-    例：'\n      Las Vegas, Nevada, USA\n' を 'Las Vegas, Nevada, USA'に変換する。
-    詳細をDataFrameとして返す。
-    
-    引数:
-    soup (html): get_soup()の出力
-    
-    戻り値:
-    大会詳細のDataFrame
+    parse event details from soup
+    includes names, urls, dates, locations of events
+    clean each element in the list, removing '\n' and ' ' 
+    e.g cleans '\n      Las Vegas, Nevada, USA\n' into 'Las Vegas, Nevada, USA'
+    return details as a df
+
+    arguments:
+    soup (html): output of get_soup()
+
+    returns:
+    a dataframe of event details
     '''
 
-    # イベントの名前とURLを格納する空のリストを作成
+    # create empty list to store event names and urls
     event_names = []
     event_urls = []
     event_dates = []
     event_locations = []
 
-    # イベントの名前とURLを抽出
+    # extract event name and urls
     for tag in soup.find_all('a', class_='b-link b-link_style_black'):
         event_names.append(tag.text.strip())
         event_urls.append(tag['href'])
 
-    # イベントの日付を抽出
+    # extract event dates
     for tag in soup.find_all('span', class_='b-statistics__date'):
         event_dates.append(tag.text.strip())
 
-    # イベントの場所を抽出
+    # extract event locations
     for tag in soup.find_all('td', class_='b-statistics__table-col b-statistics__table-col_style_big-top-padding'):
         event_locations.append(tag.text.strip())
 
-    # 最初のイベントの日付と場所をリストから削除
-    # 最初の要素は、まだ統計がない今後のイベントを表す
+    # remove first element of event dates and locations
+    # as first element here represent an upcoming event with no stats yet
     event_dates = event_dates[1:]
     event_locations = event_locations[1:]
 
-    # イベント詳細を格納するDataFrameを作成
+    # create df to store event details
     event_details_df = pd.DataFrame({
         'EVENT':event_names,
         'URL':event_urls,
@@ -102,9 +86,8 @@ def parse_event_details(soup):
         'LOCATION':event_locations
     })
 
-    # 戻り値としてDataFrameを返す
+    # return
     return event_details_df
-
 
 
 
@@ -568,36 +551,14 @@ def parse_fighter_tott(soup):
     # append fighter's name to fighter_tott
     fighter_tott.append('Fighter:'+fighter_name)
 
-    # parse fighter's record
-    fighter_record = soup.find('span', class_='b-content__title-record').text.split(':')[1].strip()
-    # append fighter's name to fighter_tott
-    fighter_tott.append('Record:'+fighter_record)
-    
     # parse fighter's tale of the tape
     tott = soup.find_all('ul', class_='b-list__box-list')[0]
     # loop through each tag to get text and next_sibling text
     for tag in tott.find_all('i'):
         # add text together and append to fighter_tott
         fighter_tott.append(tag.text + tag.next_sibling)
-
-    # parse fighter's tale of the tape
-    tott = soup.find_all('ul', class_='b-list__box-list b-list__box-list_margin-top')[0]
-    # loop through each tag to get text and next_sibling text
-    for tag in tott.find_all('i'):
-        # add text together and append to fighter_tott
-        fighter_tott.append(tag.text + tag.next_sibling)
-
-    # parse fighter's tale of the tape
-    tott = soup.find_all('ul', class_='b-list__box-list b-list__box-list_margin-top')[1]
-    # loop through each tag to get text and next_sibling text
-    for tag in tott.find_all('i'):
-        # add text together and append to fighter_tott
-        fighter_tott.append(tag.text + tag.next_sibling)
-    
     # clean each element in the list, removing '\n' and '  '
     fighter_tott = [text.replace('\n', '').replace('  ', '') for text in fighter_tott]
-
-    fighter_tott = [item for item in fighter_tott if item != '']
     
     # return
     return fighter_tott
