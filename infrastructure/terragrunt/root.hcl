@@ -3,7 +3,7 @@ locals {
 }
 
 inputs = {
-  env = local.environment_vars.locals
+  env = local.environment_vars.locals.env
 }
 
 remote_state {
