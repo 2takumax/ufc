@@ -1,15 +1,12 @@
-version: '3.8'
-
 services:
-  ufc-dev:
+  dev_env:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ~/.dbt:/root/.dbt
-    working_dir: /app
-    tty: true
+      - ${HOME}/.dbt:/root/.dbt
+    env_file:
+      - .env
     environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_DEFAULT_REGION=ap-northeast-1
+    command: sleep infinity

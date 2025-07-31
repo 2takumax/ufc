@@ -4,8 +4,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     git \
     gnupg \
-    software-properties-common \
-    direnv
+    software-properties-common
 
 # Install the HashiCorp GPG key.
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
@@ -23,17 +22,14 @@ RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
 
 RUN apt update && apt-get install terraform
 
-RUN echo 'eval "$(direnv hook bash)"' >> /root/.bashrc
+RUN wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/latest/download/terragrunt_linux_amd64 && chmod +x /usr/local/bin/terragrunt
 
-WORKDIR /app
+WORKDIR /workspace
 
-COPY .devcontainer/requirements.txt .
+COPY .devcontainer/requirements.txt /tmp/requirements.txt
 
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY . .
-
-# .envrcが存在すれば事前にallow（初回起動時の手間削減）
-RUN if [ -f .envrc ]; then direnv allow; fi
 
 CMD ["bash"]
