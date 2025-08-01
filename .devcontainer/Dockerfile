@@ -26,10 +26,6 @@ RUN wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt
 
 WORKDIR /workspace
 
-COPY .devcontainer/requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 
 RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.txt
-
-COPY . .
-
-CMD ["bash"]
