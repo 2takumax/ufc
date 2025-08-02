@@ -39,5 +39,14 @@ with DAG(
         aws_conn_id="aws_default",
     )
 
-    # 並列実行（両方のLambda関数を同時に実行）
-    [invoke_events_lambda, invoke_odds_lambda]
+    # UFC Fighters Coordinator Lambda関数を呼び出す
+    invoke_fighters_lambda = LambdaInvokeFunctionOperator(
+        task_id="invoke_scrape_fighters_coordinator",
+        function_name="prod-scrape_fighters_coordinator",  # Lambda関数名
+        invocation_type="RequestResponse",
+        payload="{}",  # 空のペイロード
+        aws_conn_id="aws_default",
+    )
+
+    # 並列実行（すべてのLambda関数を同時に実行）
+    [invoke_events_lambda, invoke_odds_lambda, invoke_fighters_lambda]

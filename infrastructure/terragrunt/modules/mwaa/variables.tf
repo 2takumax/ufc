@@ -123,9 +123,25 @@ variable "min_workers" {
   description = "numeric string, min 1"
   type        = string
 }
+variable "max_webservers" {
+  default     = "1"
+  description = "Maximum number of web servers. For mw1.micro, this must be 1"
+  type        = string
+}
+variable "min_webservers" {
+  default     = "1"
+  description = "Minimum number of web servers. For mw1.micro, this must be 1"
+  type        = string
+}
+variable "schedulers" {
+  default     = "1"
+  description = "Number of schedulers. For mw1.micro, this must be 1"
+  type        = number
+}
 variable "environment_class" {
-  default = "mw1.small"
+  default = "mw1.micro"
   type    = string
+  description = "mw1.micro: max_workers=1, min_workers=1, schedulers=1, web_servers=1"
 }
 
 # security

@@ -24,7 +24,7 @@ resource "aws_s3_object" "dbt_project" {
   count = var.upload_dbt_project ? 1 : 0
 
   bucket = var.create_s3_bucket ? aws_s3_bucket.mwaa[0].id : var.source_bucket_name
-  key    = "dags/dbt_project.zip"
+  key    = "plugins/dbt_project.zip"
   source = data.archive_file.dbt_project[0].output_path
   etag   = data.archive_file.dbt_project[0].output_md5
 }

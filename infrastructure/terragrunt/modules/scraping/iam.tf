@@ -59,3 +59,22 @@ resource "aws_iam_role_policy" "lambda_s3_policy" {
     ]
   })
 }
+
+# Policy for Lambda to invoke other Lambda functions
+resource "aws_iam_role_policy" "lambda_invoke_policy" {
+  name = "LambdaInvokePolicy"
+  role = aws_iam_role.lambda_iam_role.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "lambda:InvokeFunction",
+          "lambda:InvokeAsync"
+        ],
+        Effect   = "Allow",
+        Resource = "arn:aws:lambda:*:*:function:*-scrape_fighters_*"
+      }
+    ]
+  })
+}

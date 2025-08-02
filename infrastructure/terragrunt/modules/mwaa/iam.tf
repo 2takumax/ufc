@@ -121,7 +121,9 @@ data "aws_iam_policy_document" "base" {
     ]
     resources = [
       "arn:aws:lambda:${var.region}:${var.account_id}:function:${var.env}-scrape_events",
-      "arn:aws:lambda:${var.region}:${var.account_id}:function:${var.env}-scrape_odds"
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:${var.env}-scrape_odds",
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:${var.env}-scrape_fighters_coordinator",
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:${var.env}-scrape_fighters_worker"
     ]
   }
   statement {

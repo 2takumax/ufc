@@ -19,4 +19,7 @@ inputs = {
     upload_dbt_project = true
     upload_requirements = true
     dags_path = "${get_parent_terragrunt_dir("root")}/../../pipeline/dags"
+    
+    # Plugins path for dbt
+    plugins_s3_path = "plugins/dbt_project.zip"
 }

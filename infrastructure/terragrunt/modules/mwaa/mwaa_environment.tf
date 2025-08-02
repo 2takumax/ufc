@@ -5,6 +5,9 @@ resource "aws_mwaa_environment" "this" {
   name               = var.env
   max_workers        = var.max_workers
   min_workers        = var.min_workers
+  max_webservers     = var.max_webservers
+  min_webservers     = var.min_webservers
+  schedulers         = var.schedulers
   environment_class  = var.environment_class
   airflow_version    = var.airflow_version
 
