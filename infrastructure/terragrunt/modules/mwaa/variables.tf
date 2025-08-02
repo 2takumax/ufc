@@ -44,7 +44,7 @@ variable "plugins_s3_object_version" {
 variable "requirements_s3_path" {
   type        = string
   description = "relative path of the requirements.txt (incl. filename) within the source bucket"
-  default     = null
+  default     = "requirements.txt"
 }
 variable "requirements_s3_object_version" {
   default = null
@@ -124,7 +124,7 @@ variable "min_workers" {
   type        = string
 }
 variable "environment_class" {
-  default = "mw1.micro"
+  default = "mw1.small"
   type    = string
 }
 
@@ -208,6 +208,11 @@ variable "upload_requirements" {
   type        = bool
   description = "Whether to upload requirements.txt to S3"
   default     = false
+}
+
+variable "dags_path" {
+  type        = string
+  description = "Path to the DAGs directory"
 }
 
 # maintenance

@@ -18,4 +18,5 @@ inputs = {
     upload_dags = true
     upload_dbt_project = true
     upload_requirements = true
+    dags_path = "${get_parent_terragrunt_dir("root")}/../../pipeline/dags"
 }
