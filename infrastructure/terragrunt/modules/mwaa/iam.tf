@@ -114,6 +114,17 @@ data "aws_iam_policy_document" "base" {
     ]
   }
   statement {
+    effect    = "Allow"
+    actions   = [
+      "lambda:InvokeFunction",
+      "lambda:GetFunctionConfiguration"
+    ]
+    resources = [
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:${var.env}-scrape_events",
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:${var.env}-scrape_odds"
+    ]
+  }
+  statement {
     effect        = "Allow"
     actions       = [
       "kms:Decrypt",

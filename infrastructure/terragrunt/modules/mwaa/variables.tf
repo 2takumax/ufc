@@ -191,6 +191,25 @@ variable "worker_logs_level" {
   default     = "WARNING"
 }
 
+# DAG Upload
+variable "upload_dags" {
+  type        = bool
+  description = "Whether to upload DAGs to S3"
+  default     = false
+}
+
+variable "upload_dbt_project" {
+  type        = bool
+  description = "Whether to upload dbt project to S3"
+  default     = false
+}
+
+variable "upload_requirements" {
+  type        = bool
+  description = "Whether to upload requirements.txt to S3"
+  default     = false
+}
+
 # maintenance
 variable "weekly_maintenance_window_start" {
   type        = string

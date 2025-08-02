@@ -97,6 +97,26 @@ dbt models follow a layered approach:
 3. Use dbt commands to develop and test transformations
 4. Airflow DAGs orchestrate the pipeline execution
 
+### Adding New Components
+
+#### New DAGs
+- Add DAG files to `/pipeline/dags/etl_dags/`
+- Follow existing patterns for Lambda invocation or Snowflake operations
+- Use `schedule_interval=None` for manually triggered DAGs
+- See `/pipeline/dags/README.md` for detailed instructions
+
+#### New dbt Models
+- Source models: `/pipeline/dags/dbt/models/src/`
+- Dimension tables: `/pipeline/dags/dbt/models/dim/`
+- Fact tables: `/pipeline/dags/dbt/models/fct/`
+- Mart tables: `/pipeline/dags/dbt/models/mart/`
+- Update `sources.yml` when adding new source tables
+
+#### New Lambda Functions
+- Add Lambda code to `/infrastructure/terragrunt/modules/scraping/script/`
+- Define Lambda resources in corresponding Terraform modules
+- Update MWAA IAM role if new Lambda functions need to be invoked
+
 ### Key File Locations
 
 - Terragrunt root config: `infrastructure/terragrunt/root.hcl`

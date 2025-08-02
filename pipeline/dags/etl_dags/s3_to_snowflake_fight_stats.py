@@ -5,13 +5,13 @@ from datetime import timedelta
 
 # DAG定義
 with DAG(
-    dag_id="s3_to_snowflake_fighters",
+    dag_id="s3_to_snowflake_fight_stats",
     default_args={
         "owner": "airflow",
         "retries": 1,
         "retry_delay": timedelta(minutes=5),
     },
-    description="S3 to Snowflake FIGHTERS table ingest via COPY INTO",
+    description="S3 to Snowflake FIGHT_STATS table ingest via COPY INTO",
     schedule_interval=None,  # 手動またはトリガー実行のみ
     start_date=days_ago(1),
     catchup=False,
@@ -20,10 +20,10 @@ with DAG(
 
     # S3 → Snowflake テーブルへのデータロード（COPY INTO）
     load_to_snowflake = SnowflakeOperator(
-        task_id="copy_into_fighters",
+        task_id="copy_into_fight_stats",
         sql="""
-        COPY INTO "UFC".PUBLIC."FIGHTERS"
-        FROM @"UFC".PUBLIC."external_stage"/fighters.csv
+        COPY INTO "UFC".PUBLIC."FIGHT_STATS"
+        FROM @"UFC".PUBLIC."external_stage"/fight_stats.csv
         FILE_FORMAT = (FORMAT_NAME = "UFC".PUBLIC."MY_CSV_FORMAT")
         ;
         """,

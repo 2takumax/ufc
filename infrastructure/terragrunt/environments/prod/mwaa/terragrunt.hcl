@@ -13,4 +13,9 @@ inputs = {
     public_subnet_cidrs  = ["10.0.3.0/24", "10.0.4.0/24"]
     region = "ap-northeast-1"
     source_bucket_name    = "ufc-mwaa"
+    
+    # DAG upload設定
+    upload_dags = true
+    upload_dbt_project = true
+    upload_requirements = true
 }

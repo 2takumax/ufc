@@ -5,6 +5,7 @@ provider "registry.terraform.io/hashicorp/archive" {
   version = "2.7.1"
   hashes = [
     "h1:A7EnRBVm4h9ryO9LwxYnKr4fy7ExPMwD5a1DsY7m1Y0=",
+    "h1:MwZ8uhTOmj3W8wiMeitCnzuf+897qka4/NBIAWFrm+k=",
     "zh:19881bb356a4a656a865f48aee70c0b8a03c35951b7799b6113883f67f196e8e",
     "zh:2fcfbf6318dd514863268b09bbe19bfc958339c636bcbcc3664b45f2b8bf5cc6",
     "zh:3323ab9a504ce0a115c28e64d0739369fe85151291a2ce480d51ccbb0c381ac5",
@@ -24,6 +25,7 @@ provider "registry.terraform.io/hashicorp/aws" {
   version = "6.4.0"
   hashes = [
     "h1:2gKOcsPikRhuukFKc7zvsbNRoQt/P99CxCS4pLlo5Xk=",
+    "h1:5on+SPyBU8X4E5gZFFZmAkdGZC4wQF4EroUhATsSIgI=",
     "zh:05946a97a2d98d3a77f2dfb1133b39d61b1166f717f051a8aa44eca22a7446b0",
     "zh:07278697234332b254e990fff84fa5608aabdb256a0dbed05dfe336905d385a1",
     "zh:1b1ad46267c84fa474618048a9ad94a634cf5d0e5ec3c8e56a854638129ae4da",
@@ -47,6 +49,7 @@ provider "registry.terraform.io/snowflakedb/snowflake" {
   constraints = "2.1.0"
   hashes = [
     "h1:GzIcVThBgH3LApcVavolt/o+kLwaQVyiU33M4KTTd7M=",
+    "h1:lBvVbcp3EaCxTkf9AO6DAxTebrXTXCvjPEXecztI7K4=",
     "zh:3278a07017e0f3d7d582d328c76bc0c98f62443a455724982e43288bc62ae25e",
     "zh:4b74e3da5baeda9909e47a9c34413838613cd6222087a89061b479484fad14c4",
     "zh:6e89ac73960a8be10f43f75bbaa93893fa41bdcac9e5a33db03ea17617666f3b",

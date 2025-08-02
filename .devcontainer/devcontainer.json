@@ -16,7 +16,8 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "hashicorp.terraform",
-        "hashicorp.hcl"
+        "hashicorp.hcl",
+        "mechatroner.rainbow-csv"
       ]
     }
   }

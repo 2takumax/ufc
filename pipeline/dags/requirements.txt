@@ -1,1 +1,6 @@
+# Apache Airflow providers
+apache-airflow-providers-amazon==8.19.0
 apache-airflow-providers-snowflake==5.8.0
+
+# AWS SDK (Lambda関数呼び出し用)
+boto3==1.28.85
