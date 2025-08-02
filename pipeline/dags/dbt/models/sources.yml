@@ -2,13 +2,147 @@ version: 2
 
 sources:
   - name: ufc
-    schema: raw
+    database: UFC
+    schema: PUBLIC
     tables:
       - name: fighters
-        identifier: raw_fighters
+        description: "Fighter profile information including physical attributes and career statistics"
+        columns:
+          - name: NAME
+            description: "Fighter's full name"
+          - name: FIGHT_RECORD
+            description: "Win-Loss-Draw record"
+          - name: NICKNAME
+            description: "Fighter's nickname"
+          - name: HEIGHT
+            description: "Fighter's height"
+          - name: WEIGHT
+            description: "Fighter's weight"
+          - name: REACH
+            description: "Fighter's reach in inches"
+          - name: STANCE
+            description: "Fighter's stance (Orthodox, Southpaw, etc.)"
+          - name: DOB
+            description: "Date of birth"
+          - name: SLPM
+            description: "Significant strikes landed per minute"
+          - name: STR_ACC
+            description: "Striking accuracy percentage"
+          - name: SAPM
+            description: "Significant strikes absorbed per minute"
+          - name: STR_DEF
+            description: "Striking defense percentage"
+          - name: TD_AVG
+            description: "Takedowns average per 15 minutes"
+          - name: TD_ACC
+            description: "Takedown accuracy percentage"
+          - name: TD_DEF
+            description: "Takedown defense percentage"
+          - name: SUB_AVG
+            description: "Submissions average per 15 minutes"
+          - name: TIMESTAMP
+            description: "Data collection timestamp"
 
       - name: fight_results
-        identifier: raw_fight_results
+        description: "Historical fight results and outcomes"
+        columns:
+          - name: EVENT
+            description: "UFC event name"
+          - name: BOUT
+            description: "Fighter matchup (Fighter1 vs Fighter2)"
+          - name: OUTCOME
+            description: "Fight outcome (Win/Loss/Draw/NC)"
+          - name: WEIGHTCLASS
+            description: "Weight class of the fight"
+          - name: METHOD
+            description: "Method of victory"
+          - name: ROUND
+            description: "Round the fight ended"
+          - name: TIME
+            description: "Time the fight ended"
+          - name: TIME_FORMAT
+            description: "Format of the round time"
+          - name: REFEREE
+            description: "Referee for the fight"
+          - name: DETAILS
+            description: "Additional fight details"
+          - name: URL
+            description: "URL to fight details page"
 
       - name: fight_stats
-        identifier: raw_fight_stats
+        description: "Detailed statistics for each fight"
+        columns:
+          - name: EVENT
+            description: "UFC event name"
+          - name: FIGHT
+            description: "Fighter matchup"
+          - name: FIGHTER
+            description: "Fighter name"
+          - name: KD
+            description: "Knockdowns"
+          - name: SIG_STR
+            description: "Significant strikes (landed of attempted)"
+          - name: SIG_STR_PCT
+            description: "Significant strike percentage"
+          - name: TOTAL_STR
+            description: "Total strikes (landed of attempted)"
+          - name: TD
+            description: "Takedowns (landed of attempted)"
+          - name: TD_PCT
+            description: "Takedown percentage"
+          - name: SUB_ATT
+            description: "Submission attempts"
+          - name: PASS
+            description: "Guard passes"
+          - name: REV
+            description: "Reversals"
+          - name: HEAD
+            description: "Head strikes (landed of attempted)"
+          - name: BODY
+            description: "Body strikes (landed of attempted)"
+          - name: LEG
+            description: "Leg strikes (landed of attempted)"
+          - name: DISTANCE
+            description: "Distance strikes (landed of attempted)"
+          - name: CLINCH
+            description: "Clinch strikes (landed of attempted)"
+          - name: GROUND
+            description: "Ground strikes (landed of attempted)"
+
+      - name: event_details
+        description: "UFC event information"
+        columns:
+          - name: EVENT
+            description: "UFC event name"
+          - name: URL
+            description: "URL to event page"
+          - name: DATE
+            description: "Event date"
+          - name: LOCATION
+            description: "Event location"
+
+      - name: fight_details
+        description: "Additional fight details and metadata"
+        columns:
+          - name: EVENT
+            description: "UFC event name"
+          - name: FIGHT
+            description: "Fighter matchup"
+          - name: URL
+            description: "URL to fight details"
+
+      - name: odds
+        description: "Betting odds data"
+        columns:
+          - name: EVENT
+            description: "UFC event name"
+          - name: FIGHT
+            description: "Fighter matchup"
+          - name: FIGHTER
+            description: "Fighter name"
+          - name: ODDS
+            description: "Betting odds"
+          - name: BOOKMAKER
+            description: "Bookmaker name"
+          - name: TIMESTAMP
+            description: "Odds collection timestamp"

@@ -1,0 +1,151 @@
+version: 2
+
+models:
+  # Dimension models
+  - name: dim_fighters
+    description: "Fighter dimension table with profile information and career statistics"
+    columns:
+      - name: fighter_id
+        description: "Unique identifier for each fighter"
+        tests:
+          - unique
+          - not_null
+      - name: fighter_name
+        description: "Fighter's full name"
+        tests:
+          - not_null
+      - name: win_rate
+        description: "Career win percentage"
+      - name: age
+        description: "Fighter's current age"
+
+  - name: dim_events
+    description: "Event dimension table with UFC event information"
+    columns:
+      - name: event_id
+        description: "Unique identifier for each event"
+        tests:
+          - unique
+          - not_null
+      - name: event_name
+        description: "Official event name"
+        tests:
+          - not_null
+      - name: event_date
+        description: "Date of the event"
+        tests:
+          - not_null
+
+  - name: dim_weight_classes
+    description: "Weight class dimension table"
+    columns:
+      - name: weight_class_id
+        description: "Unique identifier for each weight class"
+        tests:
+          - unique
+          - not_null
+      - name: weight_class
+        description: "Weight class name"
+        tests:
+          - not_null
+
+  # Fact models
+  - name: fct_fight_results
+    description: "Fight results fact table with outcomes and details"
+    columns:
+      - name: fight_id
+        description: "Unique identifier for each fight"
+        tests:
+          - unique
+          - not_null
+      - name: event_id
+        description: "Foreign key to dim_events"
+        tests:
+          - not_null
+      - name: fighter1_name
+        description: "Name of fighter 1"
+        tests:
+          - not_null
+      - name: fighter2_name
+        description: "Name of fighter 2"
+        tests:
+          - not_null
+      - name: fight_outcome
+        description: "Outcome of the fight"
+        tests:
+          - accepted_values:
+              values: ['fighter1_win', 'fighter2_win', 'draw', 'no_contest', 'unknown']
+
+  - name: fct_fight_stats
+    description: "Detailed fight statistics by round"
+    columns:
+      - name: fight_stat_id
+        description: "Unique identifier for each fight stat record"
+        tests:
+          - unique
+          - not_null
+      - name: fight_id
+        description: "Foreign key to fct_fight_results"
+      - name: round
+        description: "Round number"
+        tests:
+          - not_null
+
+  - name: fct_odds
+    description: "Betting odds fact table"
+    columns:
+      - name: odds_id
+        description: "Unique identifier for each odds record"
+        tests:
+          - unique
+          - not_null
+      - name: fight_id
+        description: "Foreign key to fct_fight_results"
+      - name: american_odds
+        description: "American format betting odds"
+        tests:
+          - not_null
+
+  # Mart models
+  - name: mart_fighter_career_stats
+    description: "Aggregated career statistics for each fighter"
+    columns:
+      - name: fighter_name
+        description: "Fighter's name"
+        tests:
+          - unique
+          - not_null
+      - name: total_fights
+        description: "Total number of fights"
+        tests:
+          - not_null
+
+  - name: mart_fight_matchup_features
+    description: "Feature set for fight matchup analysis and ML modeling"
+    columns:
+      - name: fight_id
+        description: "Unique fight identifier"
+        tests:
+          - unique
+          - not_null
+      - name: fighter1_won
+        description: "Binary outcome (1 if fighter1 won, 0 if fighter2 won, NULL for draw/NC)"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+              quote: false
+
+  - name: mart_round_by_round_stats
+    description: "Detailed round-by-round statistics with momentum indicators"
+    columns:
+      - name: fight_id
+        description: "Fight identifier"
+        tests:
+          - not_null
+      - name: round
+        description: "Round number"
+        tests:
+          - not_null
+
+  - name: mart_upcoming_fight_features
+    description: "Feature set for predicting upcoming fights"
