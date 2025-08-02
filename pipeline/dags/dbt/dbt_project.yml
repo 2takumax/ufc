@@ -33,10 +33,20 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   ufc:
     +materialized: table
-
-    dim:
-      +materialized: table
+    +database: UFC
+    
     src:
       +materialized: ephemeral
+      +schema: staging
+    
+    dim:
+      +materialized: table
+      +schema: warehouse
+    
+    fct:
+      +materialized: table
+      +schema: warehouse
+    
     mart:
       +materialized: table
+      +schema: analytics

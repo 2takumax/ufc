@@ -55,7 +55,7 @@ WITH round_stats AS (
         AND fs.fighter_name = opp.opponent_name
 ),
 
-round_aggregates AS (
+round_differentials AS (
     SELECT
         rs.*,
         
@@ -101,36 +101,45 @@ round_aggregates AS (
             WHEN rs.total_str_landed > 0 
             THEN ROUND(rs.ground_landed::FLOAT / rs.total_str_landed, 3)
             ELSE NULL
-        END as ground_strike_pct,
+        END as ground_strike_pct
+        
+    FROM round_stats rs
+),
+
+round_aggregates AS (
+    SELECT
+        rd.*,
         
         -- Round outcome prediction
         CASE
-            WHEN rs.sig_str_differential > 10 AND rs.control_time_differential > 60 THEN 'Dominant'
-            WHEN rs.sig_str_differential > 5 OR rs.control_time_differential > 30 THEN 'Clear'
-            WHEN ABS(rs.sig_str_differential) <= 5 AND ABS(rs.control_time_differential) <= 30 THEN 'Close'
+            WHEN rd.sig_str_differential > 10 AND rd.control_time_differential > 60 THEN 'Dominant'
+            WHEN rd.sig_str_differential > 5 OR rd.control_time_differential > 30 THEN 'Clear'
+            WHEN ABS(rd.sig_str_differential) <= 5 AND ABS(rd.control_time_differential) <= 30 THEN 'Close'
             ELSE 'Unclear'
         END as round_dominance_level
         
-    FROM round_stats rs
+    FROM round_differentials rd
 ),
 
 cumulative_stats AS (
     SELECT
         *,
+        -- Parse round number for proper ordering
+        TRY_TO_NUMBER(REPLACE(round, 'Round ', '')) as round_number,
         
         -- Calculate cumulative stats through rounds
-        SUM(sig_str_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as cumulative_sig_str,
-        SUM(total_str_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as cumulative_total_str,
-        SUM(td_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as cumulative_td,
-        SUM(control_time_seconds) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as cumulative_control_time,
+        SUM(sig_str_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as cumulative_sig_str,
+        SUM(total_str_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as cumulative_total_str,
+        SUM(td_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as cumulative_td,
+        SUM(control_time_seconds) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as cumulative_control_time,
         
         -- Running averages
-        AVG(sig_str_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as avg_sig_str_per_round,
-        AVG(sig_str_pct) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as avg_sig_str_accuracy,
+        AVG(sig_str_landed) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as avg_sig_str_per_round,
+        AVG(sig_str_pct) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as avg_sig_str_accuracy,
         
         -- Momentum indicators
-        LAG(sig_str_differential, 1) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as prev_round_sig_str_diff,
-        sig_str_differential - LAG(sig_str_differential, 1) OVER (PARTITION BY fight_id, fighter_name ORDER BY round) as momentum_change
+        LAG(sig_str_differential, 1) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as prev_round_sig_str_diff,
+        sig_str_differential - LAG(sig_str_differential, 1) OVER (PARTITION BY fight_id, fighter_name ORDER BY TRY_TO_NUMBER(REPLACE(round, 'Round ', ''))) as momentum_change
         
     FROM round_aggregates
 )
@@ -140,15 +149,15 @@ SELECT
     
     -- Fight progression indicators
     CASE
-        WHEN round = 1 THEN 'Early'
-        WHEN round <= 3 THEN 'Middle'
+        WHEN round_number = 1 THEN 'Early'
+        WHEN round_number <= 3 THEN 'Middle'
         ELSE 'Championship'
     END as fight_stage,
     
     -- Fatigue indicators (comparing to round 1)
     CASE
-        WHEN round > 1 AND cumulative_sig_str > 0
-        THEN sig_str_landed::FLOAT / (cumulative_sig_str::FLOAT / round)
+        WHEN round_number > 1 AND cumulative_sig_str > 0
+        THEN sig_str_landed::FLOAT / (cumulative_sig_str::FLOAT / round_number)
         ELSE NULL
     END as output_vs_average,
     

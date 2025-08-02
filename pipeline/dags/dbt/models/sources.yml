@@ -134,15 +134,21 @@ sources:
       - name: odds
         description: "Betting odds data"
         columns:
+          - name: LINK
+            description: "Link to the odds source"
+          - name: DATE
+            description: "Date of the event"
           - name: EVENT
             description: "UFC event name"
-          - name: FIGHT
-            description: "Fighter matchup"
-          - name: FIGHTER
-            description: "Fighter name"
-          - name: ODDS
-            description: "Betting odds"
-          - name: BOOKMAKER
-            description: "Bookmaker name"
+          - name: FIGHTER1
+            description: "First fighter name"
+          - name: FIGHTER2
+            description: "Second fighter name"
+          - name: FIGHTER1_ODDS
+            description: "Betting odds for first fighter"
+          - name: FIGHTER2_ODDS
+            description: "Betting odds for second fighter"
+          - name: RESULT
+            description: "Fight result"
           - name: TIMESTAMP
             description: "Odds collection timestamp"

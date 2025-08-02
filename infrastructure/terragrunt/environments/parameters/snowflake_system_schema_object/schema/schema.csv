@@ -1,1 +1,4 @@
 env,name
+prod,UFC.STAGING
+prod,UFC.WAREHOUSE
+prod,UFC.ANALYTICS

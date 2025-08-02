@@ -8,7 +8,8 @@ WITH fighter_fight_stats AS (
         fs.event_date,
         fs.is_winner,
         fs.finish_type,
-        fs.round,
+        -- Parse round number from "Round X" format
+        TRY_TO_NUMBER(REPLACE(fs.round, 'Round ', '')) as round_number,
         
         -- Aggregate stats per fight
         SUM(fs.sig_str_landed) as total_sig_str_landed,
@@ -20,7 +21,7 @@ WITH fighter_fight_stats AS (
         SUM(fs.sub_attempts) as total_sub_attempts,
         SUM(fs.knockdowns) as total_knockdowns,
         SUM(fs.control_time_seconds) as total_control_time,
-        MAX(fs.round) as final_round
+        MAX(TRY_TO_NUMBER(REPLACE(fs.round, 'Round ', ''))) as final_round
         
     FROM {{ ref('fct_fight_stats') }} fs
     GROUP BY 1, 2, 3, 4, 5

@@ -17,7 +17,8 @@
         "ms-python.vscode-pylance",
         "hashicorp.terraform",
         "hashicorp.hcl",
-        "mechatroner.rainbow-csv"
+        "mechatroner.rainbow-csv",
+        "innoverio.vscode-dbt-power-user"
       ]
     }
   }
